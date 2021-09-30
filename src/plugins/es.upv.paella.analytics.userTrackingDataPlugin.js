@@ -26,6 +26,7 @@ export default class AnalyticsUserTrackingDataPlugin extends DataPlugin {
             const category = this.config.category || "PaellaPlayer";
             const action = data.event;
             const labelData = {
+                videoId: id,
                 plugin: data.plugin
             }
 

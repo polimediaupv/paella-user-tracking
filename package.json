@@ -1,23 +1,23 @@
 {
-	"name": "paella-basic-plugins",
-	"version": "1.0.0-beta.3",
+	"name": "paella-user-tracking",
+	"version": "1.0.0-beta.0",
 	"description": "Basic plugins for Paella Player",
 	"main": "src/index.js",
-	"module": "dist/paella-basic-plugins.js",
+	"module": "dist/paella-user-tracking.js",
 	"scripts": {
 		"build": "webpack --mode production",
 		"dev": "webpack serve --mode development --config webpack.debug.js"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/polimediaupv/paella-basic-plugins.git"
+		"url": "git+https://github.com/polimediaupv/paella-user-tracking.git"
 	},
 	"author": "Fernando Serrano Carpena <ferserc1@gmail.com>",
 	"license": "SEE LICENSE IN license.txt",
 	"bugs": {
-		"url": "https://github.com/polimediaupv/paella-basic-plugins"
+		"url": "https://github.com/polimediaupv/paella-user-tracking"
 	},
-	"homepage": "https://github.com/polimediaupv/paella-basic-plugins#readme",
+	"homepage": "https://github.com/polimediaupv/paella-user-tracking#readme",
 	"devDependencies": {
 		"@babel/core": "^7.12.16",
 		"@babel/preset-env": "^7.12.16",
