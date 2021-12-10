@@ -18,6 +18,11 @@ export default class UserEventTrackerPlugin extends EventLogPlugin {
 
 	async onEvent(event, params) {
 		const id = this.player.videoId;
+		// Remove plugin reference to avoid circular references
+		if (params.plugin) {
+			const { name, config } = params.plugin;
+			params.plugin = { name, config }
+		}
 		const trackingData = { event, params }
 
 		switch (event) {
@@ -28,7 +33,7 @@ export default class UserEventTrackerPlugin extends EventLogPlugin {
 		}
 
 		await this.player.data.write(
-			'userTracking',
+			this.config.context,
 			{ id },
 			trackingData
 		);

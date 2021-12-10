@@ -75,7 +75,8 @@
         },
 
         "es.upv.paella.userEventTracker": {
-            "enabled": true
+            "enabled": true,
+            "context": "userTracking"
         },
 
         "es.upv.paella.debug.userTrackingDataPlugin": {
