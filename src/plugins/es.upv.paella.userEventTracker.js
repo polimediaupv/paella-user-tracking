@@ -12,7 +12,8 @@ export default class UserEventTrackerPlugin extends EventLogPlugin {
 			Events.VOLUME_CHANGED,
 			Events.BUTTON_PRESS,
 			Events.SHOW_POPUP,
-			Events.HIDE_POPUP
+			Events.HIDE_POPUP,
+			Events.RESIZE_END
 		]
 	}
 
