@@ -33,8 +33,9 @@ export default class UserEventTrackerPlugin extends EventLogPlugin {
 			trackingData.plugin = params.plugin.name;
 		}
 
+		const context = this.config.context || "userTracking";
 		await this.player.data.write(
-			this.config.context,
+			context,
 			{ id },
 			trackingData
 		);
