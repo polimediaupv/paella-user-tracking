@@ -15,8 +15,8 @@ export default class MatomoAnalyticsUserTrackingDataPlugin extends DataPlugin {
         var trackingPermission,
             tracked;
 
-            paella.cookieconsent_base_color = this.cookieconsent_base_color;
-            paella.cookieconsent_highlight_color = this.cookieconsent_highlight_color;
+            cookieconsent_base_color = this.cookieconsent_base_color;
+            cookieconsent_highlight_color = this.cookieconsent_highlight_color;
   
         function trackMatomo() {
         if (isTrackingPermission() && !tracked && server && site_id){
