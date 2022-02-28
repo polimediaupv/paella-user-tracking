@@ -1,6 +1,6 @@
 {
 	"name": "paella-user-tracking",
-	"version": "1.0.8",
+	"version": "1.0.9",
 	"description": "Basic plugins for Paella Player",
 	"main": "src/index.js",
 	"module": "dist/paella-user-tracking.js",
@@ -33,6 +33,6 @@
 		"webpack-dev-server": "^4.7.3"
 	},
 	"dependencies": {
-		"paella-core": "^1.0.27"
+		"paella-core": "^1.0.30"
 	}
 }
