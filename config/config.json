@@ -96,12 +96,14 @@
             ]
         },
         
-        "org.opencast.analytics.matomoUserTrackingDataPlugin": {
+        "org.opencast.paella.opencast.matomoTrackingDataPlugin" :{
             "enabled": true,
-            "server": "https://matomo-die.rrz.uni-koeln.de/",
-            "site_id": 1,
-            "heartbeat": 30,
-            "client_id": "Paella 7 Beta"
+            "server": "https://matomo.com",
+            "tracking_client": "matomo",
+            "site_id":"1",
+            "context": [
+                "userTracking"
+            ]
         }
     }
 }
