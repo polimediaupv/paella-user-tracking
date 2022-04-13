@@ -30,7 +30,7 @@ export default class UserEventTrackerPlugin extends EventLogPlugin {
 		case Events.SHOW_POPUP:
 		case Events.HIDE_POPUP:
 		case Events.BUTTON_PRESS:
-			trackingData.plugin = params.plugin.name;
+			trackingData.plugin = params.plugin?.name || null;
 		}
 
 		const context = this.config.context || "userTracking";
