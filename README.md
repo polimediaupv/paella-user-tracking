@@ -33,6 +33,8 @@ The events captured by the plugin are as follows:
     Events.RESIZE_END
 ```
 
+**Exported as** `UserEventTrackerPlugin`.
+
 ### Debug user tracking data plugin
 
 Collects the events sent by the `es.upv.paella.userEventTracker` plugin and sends them to the javascript console. It allows to debug the event configuration. The plugin can subscribe to one or more data contexts, but generally it will subscribe to the same context where the `en.upv.paella.userEventTracker` plugin sends events.
@@ -48,6 +50,8 @@ Collects the events sent by the `es.upv.paella.userEventTracker` plugin and send
     ...
 }
 ```
+
+**Exported as** `DebugUserTrackingDataPlugin`.
 
 ### Google Analytics user tracking data plugin
 
@@ -67,6 +71,6 @@ Collects the events sent by the `es.upv.paella.userEventTracker` plugin and send
 }
 ```
 
-
+**Exported as** `GoogleAnalyticsUserTrackingDataPlugin`.
 
 
