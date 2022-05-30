@@ -1,20 +1,27 @@
 import { Events, EventLogPlugin } from 'paella-core';
 
+//const eventKeys = Object.keys(Events);
+
+const getPaellaEvents = (events) => events.map(eventName => Events[eventName]);
+
 export default class UserEventTrackerPlugin extends EventLogPlugin {
 	get events() {
-		return [
-			Events.PLAY,
-			Events.PAUSE,
-			Events.SEEK,
-			Events.STOP,
-			Events.ENDED,
-			Events.FULLSCREEN_CHANGED,
-			Events.VOLUME_CHANGED,
-			Events.BUTTON_PRESS,
-			Events.SHOW_POPUP,
-			Events.HIDE_POPUP,
-			Events.RESIZE_END
-		]
+		if (this.config.events) {
+			return getPaellaEvents(this.config.events);
+		}
+		else {
+			return [
+				Events.PLAY,
+				Events.PAUSE,
+				Events.SEEK,
+				Events.STOP,
+				Events.ENDED,
+				Events.FULLSCREEN_CHANGED,
+				Events.VOLUME_CHANGED,
+				Events.BUTTON_PRESS,
+				Events.RESIZE_END
+			]
+		}
 	}
 
 	async onEvent(event, params) {
