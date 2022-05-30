@@ -45,11 +45,31 @@ Collects the events sent by the `es.upv.paella.userEventTracker` plugin and send
         "enabled": true,
         "context": [
             "userTracking"
+        ],
+        "events": [
+            "PLAY",
+            "PAUSE",
+            "SEEK",
+            "TIMEUPDATE"
         ]
     },
     ...
 }
 ```
+
+The `events` property is used to specify the events that will trigger an user tracking data event. If the `events` key is not defined in the configuration, the following events will be used by default:
+
+- **PLAY**
+- **PAUSE**
+- **SEEK**
+- **STOP**
+- **ENDED**
+- **FULLSCREEN_CHANGED**
+- **VOLUME_CHANGED**
+- **BUTTON_PRESS**
+- **RESIZE_END**
+
+If you define the `events` property, the list that you define will replace all the default events.
 
 **Exported as** `DebugUserTrackingDataPlugin`.
 
