@@ -1,6 +1,6 @@
 {
 	"name": "paella-user-tracking",
-	"version": "1.0.13",
+	"version": "1.0.14",
 	"description": "User analytics and tracking plugins for Paella Player",
 	"main": "src/index.js",
 	"module": "dist/paella-user-tracking.js",
