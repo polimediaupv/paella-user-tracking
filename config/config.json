@@ -98,6 +98,16 @@
 
         "es.upv.paella.debug.userTrackingDataPlugin": {
             "enabled": true,
+            "order": 5,
+            "context": [
+                "userTracking"
+            ]
+        },
+
+        "es.upv.paella.debugTag.userTrackingDataPlugin": {
+            "enabled": true,
+            "tagId": "dataLog",
+            "order": 0,
             "context": [
                 "userTracking"
             ]
