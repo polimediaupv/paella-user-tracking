@@ -121,6 +121,15 @@
             "context": [
                 "userTracking"
             ]
+        },
+        "es.upv.paella.matomo.userTrackingDataPlugin": {
+            "enabled": true,
+            "context": [
+                "userTracking"
+            ],
+            "matomoGlobalLoaded": false,
+            "server": "//matomo.media.upv.es/",
+            "siteId": "2"
         }
     }
 }
