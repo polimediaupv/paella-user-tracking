@@ -2,12 +2,85 @@
 import { DataPlugin, Events, bindEvent  } from "paella-core";
 
 export default class MatomoUserTrackingDataPlugin extends DataPlugin {
-    async load() {
-        const matomoGlobalLoaded = this.config.matomoGlobalLoaded ?? false;
-        const server = this.config.server;
-        const siteId = this.config.siteId;
+    
+    async isEnabled() {
+        if (!(await super.isEnabled())) {
+          return false;
+        }
+        else {
+            this.matomoGlobalLoaded = this.config.matomoGlobalLoaded ?? false;
+            this.server = this.config.server;
+            this.siteId = this.config.siteId;
+            this.events = this.config.events;
+            
+            if (!this.matomoGlobalLoaded && !(this.server && this.siteId)) {
+                this.player.log.warn('Matomo plugin: Plugin is enabled, but is not configured correctly. Please configue `matomoGlobalLoaded`, `server`and `siteId` parameters.');
+                return false;
+            }
+            return true;
+        }
+    }
 
-        if (matomoGlobalLoaded) {
+    async getCurrentUserId() {
+        return null;
+    }
+
+    async trackCustomDimensions() {
+        const templateVars = await this.getTemplateVars();
+        const customDimensions = this.config.customDimensions ?? {};
+
+        try {
+            Object.entries(customDimensions).forEach(([customDimensionId, customDimensionValueTemplate]) => {
+                const customDimensionValue = this.applyTemplate(customDimensionValueTemplate, templateVars);
+                _paq.push(['setCustomDimension', customDimensionId, customDimensionValue]);
+                this.player.log.debug(`Matomo plugin: setting custom dimension id=${customDimensionId} to '${customDimensionValue}'`);
+            });
+        }
+        catch(e) {            
+        }
+    }
+
+    async getTemplateVars(data) {
+        let eventData = this.getEventData(data);
+
+        return {
+            videoId: this.player._videoId,
+            metadata: this.player.videoManifest.metadata,
+            event: data?.event || '',
+            eventData: eventData
+        };
+    }
+
+    getEventData(data) {
+
+        switch (data?.event) {
+            case Events.SEEK:
+                return Math.round(data.params.newTime);
+            case Events.VOLUME_CHANGED:
+                return data.params.volume*100;
+            case Events.BUTTON_PRESS:
+                return data.params.plugin.name;
+            case Events.SHOW_POPUP:
+                return data.params.plugin.name;
+            case Events.HIDE_POPUP:
+                return data.params.plugin.name;
+            case Events.RESIZE_END:
+                return `${ data.params.size.w }x${ data.params.size.h }`;
+            case Events.LAYOUT_CHANGED:
+                return data.params.layoutId;
+            case Events.PLAYBACK_RATE_CHANGED:
+                return data.params.newPlaybackRate;
+            case Events.CAPTIONS_ENABLED:
+                return data.params.language;
+        }
+
+        return '';
+    }
+
+    async load() {
+        const heartBeatTime = this.config.heartBeatTime || 30;
+                
+        if (this.matomoGlobalLoaded) {
             var _paq = window._paq = window._paq || [];
             this.player.log.debug('Assuming Matomo analytics is initialized globaly.');
             if (server) {
@@ -18,90 +91,54 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
             }
         }
         else {
-            if (server && siteId) {
-                this.player.log.debug("Matomo analytics plugin enabled.");
-                var _paq = window._paq = window._paq || [];
-                _paq.push(['trackPageView']);
-                _paq.push(['enableLinkTracking']);
-                (function() {
-                    var u=server;
-                    _paq.push(['setTrackerUrl', u+'matomo.php']);
-                    _paq.push(['setSiteId', siteId]);
-                    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-                    g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-                })();
+            const server = this.server;
+            const siteId = this.siteId;            
+            this.player.log.debug("Matomo analytics plugin enabled.");
+            var _paq = window._paq = window._paq || [];
+            this.trackCustomDimensions();
+            const userId =  await this.getCurrentUserId();
+            if (userId) {
+                _paq.push(['setUserId', userId]);
             }
-            else {
-                this.player.log.warn('Matomo plugin: Plugin is enabled, but is not configured correctly. Plaase configue `server`and `siteId` parameters.');
-            }
+            _paq.push(['trackPageView']);
+            _paq.push(['enableLinkTracking']);
+            // accurately measure the time spent in the visit
+            _paq.push(['enableHeartBeatTimer', heartBeatTime]);
+            (function() {
+                var u=server;
+                _paq.push(['setTrackerUrl', u+'matomo.php']);
+                _paq.push(['setSiteId', siteId]);
+                var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+                g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+            })();
         }
+        this.trackCustomDimensions();
+        // Scan For Media
+        bindEvent(this.player, Events.STREAM_LOADED, () => {
+            _paq.push(['MediaAnalytics::scanForMedia']);
+        });
     }
     
-    async write(context, { id }, data) {
-        const currentTime = await this.player.videoContainer.currentTime();
-        // console.log(`matomo -> time: ${ currentTime }, video id: ${ id }`, context, data);
-        const category = this.config.category || "PaellaPlayer";
+    applyTemplate(txt, templateVars) {        
+        return txt.replace(/\${[^{]*}/g, (t)=>{
+            return t.substring(2, t.length-1).split(".").reduce((a,b)=>{return a[b];}, templateVars)
+        });
+    };
 
-        switch (data.event) {
-            case Events.PLAY:
-            case Events.PAUSE:
-            case Events.STOP:
-            case Events.ENDED:
-                _paq.push(['trackEvent', category, data.event, id]);
-                break;
-            case Events.SEEK:
-                _paq.push(['trackEvent', category, data.event, id, Math.round(data.params.newTime)]);
-                break;
-            case (Events.FULLSCREEN_CHANGED):
-                _paq.push(['trackEvent', category, data.event, id,  data.event ? 'Enter' : 'Exit']);
-                break;
-            case Events.VOLUME_CHANGED:
-                _paq.push(['trackEvent', category, data.event, id, data.params.volume*100]);
-                break;
-            case Events.TIMEUPDATE:
-                break;
-            case Events.TRIMMING_CHANGED:
-                break;
-            case Events.CAPTIONS_CHANGED:
-                break;
-            case Events.BUTTON_PRESS:
-                _paq.push(['trackEvent', category, data.event, id, data.params.plugin.name]);
-                break;
-            case Events.SHOW_POPUP:
-                _paq.push(['trackEvent', category, data.event, id, data.params.plugin.name]);
-                break;
-            case Events.HIDE_POPUP:
-                _paq.push(['trackEvent', category, data.event, id, data.params.plugin.name]);
-                break;
-            case Events.MANIFEST_LOADED:
-                break;
-            case Events.STREAM_LOADED:
-                break;
-            case Events.PLAYER_LOADED:
-                _paq.push(['trackEvent', category, data.event, id]);
-                break;
-            case Events.PLAYER_UNLOADED:
-                 break;
-            case Events.RESIZE:
-                break;
-            case Events.RESIZE_END:
-                _paq.push(['trackEvent', category, data.event, id, `${ data.params.size.w }x${ data.params.size.h }` ]);
-                break;
-            case Events.LAYOUT_CHANGED:
-                // _paq.push(['trackEvent', category, data.event, id, `` ]); // TODO
-                break;
-            case Events.PLAYBACK_RATE_CHANGED:
-                _paq.push(['trackEvent', category, data.event, id, data.params.newPlaybackRate ]);
-                break;      
-            case Events.VIDEO_QUALITY_CHANGED:
-                break;
-            case Events.HIDE_UI:
-                break;
-            case Events.SHOW_UI:
-                break;
-            default:
-                this.player.log.warn(`Matomo plugin: Event '${data.event} not logged.`);
-                break;
+    async write(context, { id }, data) {
+        if (this.events) {
+            const categoryT = this.events.category || 'PaellaPlayer';
+            const actionT = this.events.action || '${event}';
+            const nameT = this.events.name || '${eventData}';
+
+            const templateVars = await this.getTemplateVars(data);
+
+            const category = this.applyTemplate(categoryT, templateVars);
+            const action = this.applyTemplate(actionT, templateVars);
+            const name = this.applyTemplate(nameT, templateVars);
+            
+            _paq.push(['trackEvent', category, action, name]);
+            this.player.log.debug(`Matomo plugin: track event category='${category}', action='${action}', name='${name}'`);
         }
     }
 }

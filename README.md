@@ -73,6 +73,87 @@ If you define the `events` property, the list that you define will replace all t
 
 **Exported as** `DebugUserTrackingDataPlugin`.
 
+### Matomo user tracking data plugin
+
+Collects the events sent by the `es.upv.paella.userEventTracker` plugin and sends them to Matomo. In the plugin configuration, we'll set one or more data `context`, that must contains at least those defined in the `es.upv.paella.userEventTracker` plugin configuration, and the specific data for the analytics account.
+
+```json
+{
+    "es.upv.paella.matomo.userTrackingDataPlugin": {
+        "enabled": false,
+        "context": [
+            "userTracking"
+        ],        
+        "server": "//matomo.server.com/",
+        "siteId": "1",
+        "matomoGlobalLoaded": false,
+        "events": {
+            "category": "PaellaPlayer",
+            "action": "${event}",
+            "name": "${videoId}"
+        },
+        "customDimensions": {
+            "1": "${videoId}"
+        }
+    },
+}
+```
+
+`events` property can be a boolean value or an object
+
+* true: events are loagged with default values.
+* false: events are not logged.
+* object: events are logged with custom template values.
+    ```json
+    {
+        "category": "PaellaPlayer",
+        "action": "${event}",
+        "name": "${videoId}"
+    }
+    ```
+Available template variables are:
+
+* `${event}`: The event name.
+* `${videoId}`: The video identifier.
+* `${eventData}`: A text representation of the data received by the event.
+* `${metadata}`: The video manifest metadata field.
+
+`customDimensions` property is an object where `key` is the custom dimension id and the `value` is a string template.
+
+```json
+{
+    "1": "${videoId}"
+}
+```
+
+### Adapt to your institution
+
+You can extends this plugin and adapt it to your institution. In most cases you only need to implement two functions:
+
+* `getCurrentUserId`: returns a text representation of the logged user.
+* `getTemplateVars`: return an object with te available template variables.
+
+```js
+import { MatomoUserTrackingDataPlugin } from 'paella-user-tracking';
+
+export default class MyExtentedMatomoUserTrackingDataPlugin extends MatomoUserTrackingDataPlugin {
+
+    async getCurrentUserId() {
+        return 'anonymous';
+    }
+
+    async getTemplateVars() {
+        let templateVars = await super.getTemplateVars();
+        
+        return {
+            ...templateVars,
+            newvar: "My new variable"
+        };
+    }
+```
+
+**Exported as** `MatomoUserTrackingDataPlugin`.
+
 ### Google Analytics user tracking data plugin
 
 Collects the events sent by the `es.upv.paella.userEventTracker` plugin and sends them to Google Analytics. In the plugin configuration, we'll set one or more data `context`, that must contains at least those defined in the `es.upv.paella.userEventTracker` plugin configuration, and the specific data for the analytics account.

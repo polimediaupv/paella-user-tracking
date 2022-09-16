@@ -123,13 +123,21 @@
             ]
         },
         "es.upv.paella.matomo.userTrackingDataPlugin": {
-            "enabled": true,
+            "enabled": false,
             "context": [
                 "userTracking"
             ],
+            "server": "//matomo.server.com/",
+            "siteId": "1",
             "matomoGlobalLoaded": false,
-            "server": "//matomo.media.upv.es/",
-            "siteId": "2"
+            "events": {
+                "category": "PaellaPlayer",
+                "action": "${event}",
+                "name": "${videoId}"
+            },
+            "customDimensions": {
+                "1": "${videoId}"
+            }
         }
     }
 }
