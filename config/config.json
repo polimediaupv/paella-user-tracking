@@ -4,6 +4,33 @@
 
     "defaultLayout": "presenter-presentation",
     
+    "cookieConsent": [
+        {
+            "type": "strictly-necessary",
+            "title": "Strictly necessary cookies",
+            "description": "These cookies are essential to provide you with services available through our website and to enable you to use certain features of our website.",
+            "required": true
+        },
+        {
+            "type": "functionality",
+            "title": "Functionality cookies",
+            "description": "These cookies are used to provide you with a more personalized experience on our website and to remember choices you make when you use our website.",
+            "required": false
+        },
+        {
+            "type": "tracking",
+            "title": "Tracking cookies",
+            "description": "These cookies are used to collect information to analyze the traffic to our website and how visitors are using our website.",
+            "required": false
+        },
+        {
+            "type": "targeting",
+            "title": "Targeting and advertising cookies",
+            "description": "These cookies are used to show advertising that is likely to be of interest to you based on your browsing habits.",
+            "required": false
+        }
+    ],
+
     "plugins": {
         "es.upv.paella.testPlugin": {
             "enabled": true,
@@ -130,6 +157,7 @@
             "server": "//matomo.server.com/",
             "siteId": "1",
             "matomoGlobalLoaded": false,
+            "cookieType": "tracking",
             "events": {
                 "category": "PaellaPlayer",
                 "action": "${event}",

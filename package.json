@@ -1,6 +1,6 @@
 {
 	"name": "paella-user-tracking",
-	"version": "1.5.0",
+	"version": "1.8.0",
 	"description": "User analytics and tracking plugins for Paella Player",
 	"main": "src/index.js",
 	"module": "dist/paella-user-tracking.js",
@@ -22,17 +22,17 @@
 		"@babel/core": "^7.12.16",
 		"@babel/preset-env": "^7.12.16",
 		"babel-loader": "^8.2.2",
-		"copy-webpack-plugin": "^7.0.0",
-		"css-loader": "^5.0.1",
+		"copy-webpack-plugin": "^11.0.0",
+		"css-loader": "^6.7.1",
 		"file-loader": "^6.2.0",
-		"html-webpack-plugin": "^4.5.1",
-		"style-loader": "^2.0.0",
+		"html-webpack-plugin": "^5.5.0",
+		"style-loader": "^3.3.1",
 		"svg-inline-loader": "^0.8.2",
 		"webpack": "^5.66.0",
 		"webpack-cli": "^4.9.1",
 		"webpack-dev-server": "^4.7.3"
 	},
 	"dependencies": {
-		"paella-core": "^1.5.0"
+		"paella-core": "^1.8.1"
 	}
 }

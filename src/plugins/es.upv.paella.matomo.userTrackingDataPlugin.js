@@ -78,8 +78,24 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
     }
 
     async load() {
-        const heartBeatTime = this.config.heartBeatTime || 30;
-                
+        const heartBeatTime = this.config.heartBeatTime || 15;
+
+        var _paq = window._paq = window._paq || [];
+        // _paq.push(['requireConsent']);
+        _paq.push(['requireCookieConsent']);
+        bindEvent(this.player, Events.COOKIE_CONSENT_CHANGED, () => {
+            this.player.log.debug('Matomo: Cookie consent changed.');
+            if (this.player.cookieConsent.getConsentForType(this.config.cookieType)) {
+                // _paq.push(['rememberConsentGiven']);
+                _paq.push(['rememberCookieConsentGiven']);
+            }
+            else {
+                // _paq.push(['forgetConsentGiven']);
+                _paq.push(['forgetCookieConsentGiven']);
+            }
+        });
+        
+        
         if (this.matomoGlobalLoaded) {
             var _paq = window._paq = window._paq || [];
             this.player.log.debug('Assuming Matomo analytics is initialized globaly.');
@@ -94,7 +110,6 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
             const server = this.server;
             const siteId = this.siteId;            
             this.player.log.debug("Matomo analytics plugin enabled.");
-            var _paq = window._paq = window._paq || [];
             this.trackCustomDimensions();
             const userId =  await this.getCurrentUserId();
             if (userId) {
@@ -102,8 +117,6 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
             }
             _paq.push(['trackPageView']);
             _paq.push(['enableLinkTracking']);
-            // accurately measure the time spent in the visit
-            _paq.push(['enableHeartBeatTimer', heartBeatTime]);
             (function() {
                 var u=server;
                 _paq.push(['setTrackerUrl', u+'matomo.php']);
@@ -112,6 +125,8 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
                 g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
             })();
         }
+        // accurately measure the time spent in the visit
+        _paq.push(['enableHeartBeatTimer', heartBeatTime]);
         this.trackCustomDimensions();
         // Scan For Media
         bindEvent(this.player, Events.STREAM_LOADED, () => {
