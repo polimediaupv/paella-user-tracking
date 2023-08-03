@@ -2,6 +2,62 @@
 
 It contains basic plugins for capturing user events, such as button or key presses.
 
+## Usage
+
+**Step 1:** Import the plugin context and add it to the Paella Player initialization parameters:
+
+Usin plugin context API:
+
+```javascript
+...
+import getUserTrackingPluginsContext from 'paella-user-tracking';
+
+let paella = new Paella('player-container', {
+    customPluginContext: [
+        getUserTrackingPluginsContext()
+    ]
+});
+...
+```
+
+Using explicit plugin import API (paella-user-tracking >= 1.41):
+
+```javascript
+...
+import {
+    userTrackingPlugins, // All plugins
+    MatomoUserTrackingDataPlugin      // Independent plugin
+} from 'paella-basic-plugins';
+
+let paella = new Paella('player-container', {
+    plugins: [
+        ...userTrackingPlugins,    // All plugins
+        { // One plugin
+            plugin: MatomoUserTrackingDataPlugin,
+            config: {
+                enabled: true
+            }
+        }
+    ]
+});
+...
+```
+
+**Step 2:** Configure the plugins you want to use in the paella player configuration.
+
+```json
+{
+    "plugins": {
+        ...
+        "es.upv.paella.userEventTracker": {
+            "enabled": true
+            ...
+        }
+        ... other plugin settings
+    }
+}
+```
+
 ## Included plugins
 
 ### User event tracker

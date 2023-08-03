@@ -1,8 +1,17 @@
 
 import { DataPlugin, Events, bindEvent  } from "paella-core";
+import UserTrackingPlugins from "./UserTrackingPlugins";
 
 export default class MatomoUserTrackingDataPlugin extends DataPlugin {
-    
+
+    getPluginModuleInstance() {
+		return UserTrackingPlugins.Get();
+	}
+
+	get name() {
+		return super.name || "es.upv.paella.matomo.userTrackingDataPlugin";
+	}
+
     async isEnabled() {
         if (!(await super.isEnabled())) {
           return false;

@@ -1,7 +1,16 @@
 
 import { DataPlugin  } from "paella-core";
+import UserTrackingPlugins from "./UserTrackingPlugins";
 
 export default class AnalyticsUserTrackingDataPlugin extends DataPlugin {
+    getPluginModuleInstance() {
+		return UserTrackingPlugins.Get();
+	}
+
+	get name() {
+		return super.name || "es.upv.paella.analytics.userTrackingDataPlugin";
+	}
+
     async load() {
         const trackingId = this.config.trackingId;
         const domain = this.config.domain || "auto";

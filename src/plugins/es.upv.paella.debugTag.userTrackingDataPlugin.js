@@ -1,7 +1,15 @@
 
 import { DataPlugin } from 'paella-core';
+import UserTrackingPlugins from "./UserTrackingPlugins";
 
 export default class DebugTagTrackingDataPlugin extends DataPlugin {
+    getPluginModuleInstance() {
+		return UserTrackingPlugins.Get();
+	}
+
+	get name() {
+		return super.name || "es.upv.paella.debugTag.userTrackingDataPlugin";
+	}
 
     async load() {
         if (this.config.tagId) {

@@ -8,6 +8,33 @@ export default function getUserTrackingPluginsContext() {
     return require.context("./plugins", true, /\.js/)
 }
 
+export const userTrackingPlugins = [
+    {
+        plugin: GoogleAnalyticsUserTrackingData,
+        config: {
+            enabled: true
+        },
+    },
+    {
+        plugin: MatomoUserTrackingData,
+        config: {
+            enabled: true
+        },
+    },
+    {
+        plugin: DebugUserTrackingData,
+        config: {
+            enabled: true
+        },
+    },
+    {
+        plugin: UserEventTracker,
+        config: {
+            enabled: true
+        },
+    }
+];
+
 export const GoogleAnalyticsUserTrackingDataPlugin = GoogleAnalyticsUserTrackingData;
 export const MatomoUserTrackingDataPlugin = MatomoUserTrackingData;
 export const DebugUserTrackingDataPlugin = DebugUserTrackingData;

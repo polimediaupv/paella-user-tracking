@@ -1,10 +1,19 @@
 import { Events, EventLogPlugin } from 'paella-core';
+import UserTrackingPlugins from "./UserTrackingPlugins";
 
 //const eventKeys = Object.keys(Events);
 
 const getPaellaEvents = (events) => events.map(eventName => Events[eventName]);
 
 export default class UserEventTrackerPlugin extends EventLogPlugin {
+	getPluginModuleInstance() {
+		return UserTrackingPlugins.Get();
+	}
+
+	get name() {
+		return super.name || "es.upv.paella.userEventTracker";
+	}
+
 	get events() {
 		if (this.config.events) {
 			return getPaellaEvents(this.config.events);
