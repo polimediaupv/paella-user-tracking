@@ -125,7 +125,21 @@ The `events` property is used to specify the events that will trigger an user tr
 - **BUTTON_PRESS**
 - **RESIZE_END**
 
-If you define the `events` property, the list that you define will replace all the default events.
+If you define the `events` property, the list that you define will replace all the default events. In addition to this, if the `LOG` event is captured, the `logLevel` attribute can be used to customize the log level we want to write. Note that the log level defined in `paella-core` does not affect `LOG` events, as these are always generated. The `paella-core` log level only affects whether or not the log message will be written to the console:
+
+```json
+{
+    "es.upv.paella.debug.userTrackingDataPlugin": {
+        ...
+        "events": [
+            ...
+            "LOG"
+        ],
+        "logLevel"; "DEBUG"
+    },
+    ...
+}
+```
 
 **Exported as** `DebugUserTrackingDataPlugin`.
 

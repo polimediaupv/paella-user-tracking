@@ -119,8 +119,10 @@
 	            "HIDE_POPUP",
 	            "LAYOUT_CHANGED",
 	            "PLAYBACK_RATE_CHANGED",
-                "RESIZE_END"
-            ]
+                "RESIZE_END",
+                "LOG"
+            ],
+            "logLevel": "DEBUG"
         },
 
         "es.upv.paella.debug.userTrackingDataPlugin": {
