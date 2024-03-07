@@ -108,10 +108,10 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
         if (this.matomoGlobalLoaded) {
             var _paq = window._paq = window._paq || [];
             this.player.log.debug('Assuming Matomo analytics is initialized globaly.');
-            if (server) {
+            if (this.config.server) {
                 this.player.log.warn('Matomo plugin: `server` parameter is defined, but never used because Matomo is loaded globaly in the page. Is it an error? Please check it.');
             }
-            if (siteId) {
+            if (this.config.siteId) {
                 this.player.log.warn('Matomo plugin: `siteId` parameter is defined, but never used because Matomo is loaded globaly in the page. Is it an error? Please check it.');
             }
         }
