@@ -46,7 +46,7 @@ let paella = new Paella('player-container', {
 From version 1.42.2, you can also use the generic plugin array name to import all the plugins:
 
 ```js
-import { allPlugins as layoutPlugins } from 'paella-layout-plugins'
+import { allPlugins as userTracking } from 'paella-user-tracking'
 ...
 ```
 
