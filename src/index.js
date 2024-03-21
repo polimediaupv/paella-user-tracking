@@ -35,6 +35,8 @@ export const userTrackingPlugins = [
     }
 ];
 
+export const allPlugins = userTrackingPlugins;
+
 export const GoogleAnalyticsUserTrackingDataPlugin = GoogleAnalyticsUserTrackingData;
 export const MatomoUserTrackingDataPlugin = MatomoUserTrackingData;
 export const DebugUserTrackingDataPlugin = DebugUserTrackingData;

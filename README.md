@@ -43,6 +43,16 @@ let paella = new Paella('player-container', {
 ...
 ```
 
+From version 1.42.2, you can also use the generic plugin array name to import all the plugins:
+
+```js
+import { allPlugins as layoutPlugins } from 'paella-layout-plugins'
+...
+```
+
+All the plugin libraries exports the `allPlugins` array. This is done in order to have a method to import all plugins using always the same name for all libraries.
+
+
 **Step 2:** Configure the plugins you want to use in the paella player configuration.
 
 ```json
