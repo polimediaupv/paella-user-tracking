@@ -163,9 +163,13 @@ Collects the events sent by the `es.upv.paella.userEventTracker` plugin and send
         "enabled": false,
         "context": [
             "userTracking"
-        ],        
+        ],
         "server": "//matomo.server.com/",
         "siteId": "1",
+        "trackerUrl": {
+            "php": "matomo.php",
+            "js": "matomo.js"
+        },
         "matomoGlobalLoaded": false,
         "events": {
             "category": "PaellaPlayer",
