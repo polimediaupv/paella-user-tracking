@@ -158,6 +158,10 @@
             ],
             "server": "//matomo.server.com/",
             "siteId": "1",
+            "trackerUrl": {
+                "php": "matomo.php",
+                "js": "matomo.js"
+            },
             "matomoGlobalLoaded": false,
             "cookieType": "tracking",
             "events": {

@@ -118,6 +118,10 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
         else {
             const server = this.server;
             const siteId = this.siteId;            
+            const trackerUrl = {
+                php: this.config.trackerUrl?.php ?? 'matomo.php',
+                js: this.config.trackerUrl?.js ?? 'matomo.js'
+            };
             this.player.log.debug("Matomo analytics plugin enabled.");
             this.trackCustomDimensions();
             const userId =  await this.getCurrentUserId();
@@ -128,10 +132,10 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
             _paq.push(['enableLinkTracking']);
             (function() {
                 var u=server;
-                _paq.push(['setTrackerUrl', u+'matomo.php']);
+                _paq.push(['setTrackerUrl', u+trackerUrl.php]);
                 _paq.push(['setSiteId', siteId]);
                 var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-                g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+                g.type='text/javascript'; g.async=true; g.src=u+trackerUrl.js; s.parentNode.insertBefore(g,s);
             })();
         }
         // accurately measure the time spent in the visit
