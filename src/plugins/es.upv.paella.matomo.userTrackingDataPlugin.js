@@ -41,7 +41,7 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
         try {
             Object.entries(customDimensions).forEach(([customDimensionId, customDimensionValueTemplate]) => {
                 const customDimensionValue = this.applyTemplate(customDimensionValueTemplate, templateVars);
-                _paq.push(['setCustomDimension', customDimensionId, customDimensionValue]);
+                window._paq.push(['setCustomDimension', customDimensionId, customDimensionValue]);
                 this.player.log.debug(`Matomo plugin: setting custom dimension id=${customDimensionId} to '${customDimensionValue}'`);
             });
         }
@@ -89,24 +89,23 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
     async load() {
         const heartBeatTime = this.config.heartBeatTime || 15;
 
-        var _paq = window._paq = window._paq || [];
-        // _paq.push(['requireConsent']);
-        _paq.push(['requireCookieConsent']);
+        window._paq = window._paq || [];
+        // window._paq.push(['requireConsent']);
+        window._paq.push(['requireCookieConsent']);
         bindEvent(this.player, Events.COOKIE_CONSENT_CHANGED, () => {
             this.player.log.debug('Matomo: Cookie consent changed.');
             if (this.player.cookieConsent.getConsentForType(this.config.cookieType)) {
-                // _paq.push(['rememberConsentGiven']);
-                _paq.push(['rememberCookieConsentGiven']);
+                // window._paq.push(['rememberConsentGiven']);
+                window._paq.push(['rememberCookieConsentGiven']);
             }
             else {
-                // _paq.push(['forgetConsentGiven']);
-                _paq.push(['forgetCookieConsentGiven']);
+                // window._paq.push(['forgetConsentGiven']);
+                window._paq.push(['forgetCookieConsentGiven']);
             }
         });
         
         
         if (this.matomoGlobalLoaded) {
-            var _paq = window._paq = window._paq || [];
             this.player.log.debug('Assuming Matomo analytics is initialized globaly.');
             if (this.config.server) {
                 this.player.log.warn('Matomo plugin: `server` parameter is defined, but never used because Matomo is loaded globaly in the page. Is it an error? Please check it.');
@@ -126,24 +125,24 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
             this.trackCustomDimensions();
             const userId =  await this.getCurrentUserId();
             if (userId) {
-                _paq.push(['setUserId', userId]);
+                window._paq.push(['setUserId', userId]);
             }
-            _paq.push(['trackPageView']);
-            _paq.push(['enableLinkTracking']);
+            window._paq.push(['trackPageView']);
+            window._paq.push(['enableLinkTracking']);
             (function() {
                 var u=server;
-                _paq.push(['setTrackerUrl', u+trackerUrl.php]);
-                _paq.push(['setSiteId', siteId]);
+                window._paq.push(['setTrackerUrl', u+trackerUrl.php]);
+                window._paq.push(['setSiteId', siteId]);
                 var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
                 g.type='text/javascript'; g.async=true; g.src=u+trackerUrl.js; s.parentNode.insertBefore(g,s);
             })();
         }
         // accurately measure the time spent in the visit
-        _paq.push(['enableHeartBeatTimer', heartBeatTime]);
+        window._paq.push(['enableHeartBeatTimer', heartBeatTime]);
         this.trackCustomDimensions();
         // Scan For Media
         bindEvent(this.player, Events.STREAM_LOADED, () => {
-            _paq.push(['MediaAnalytics::scanForMedia']);
+            window._paq.push(['MediaAnalytics::scanForMedia']);
         });
     }
     
@@ -165,7 +164,7 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
             const action = this.applyTemplate(actionT, templateVars);
             const name = this.applyTemplate(nameT, templateVars);
             
-            _paq.push(['trackEvent', category, action, name]);
+            window._paq.push(['trackEvent', category, action, name]);
             this.player.log.debug(`Matomo plugin: track event category='${category}', action='${action}', name='${name}'`);
         }
     }
