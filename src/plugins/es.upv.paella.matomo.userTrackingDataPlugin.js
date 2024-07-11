@@ -21,7 +21,7 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
             this.server = this.config.server;
             this.siteId = this.config.siteId;
             this.events = this.config.events;
-            
+
             if (!this.matomoGlobalLoaded && !(this.server && this.siteId)) {
                 this.player.log.warn('Matomo plugin: Plugin is enabled, but is not configured correctly. Please configue `matomoGlobalLoaded`, `server`and `siteId` parameters.');
                 return false;
@@ -45,7 +45,7 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
                 this.player.log.debug(`Matomo plugin: setting custom dimension id=${customDimensionId} to '${customDimensionValue}'`);
             });
         }
-        catch(e) {            
+        catch(e) {
         }
     }
 
@@ -103,8 +103,8 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
                 window._paq.push(['forgetCookieConsentGiven']);
             }
         });
-        
-        
+
+
         if (this.matomoGlobalLoaded) {
             this.player.log.debug('Assuming Matomo analytics is initialized globaly.');
             if (this.config.server) {
@@ -116,7 +116,7 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
         }
         else {
             const server = this.server;
-            const siteId = this.siteId;            
+            const siteId = this.siteId;
             const trackerUrl = {
                 php: this.config.trackerUrl?.php ?? 'matomo.php',
                 js: this.config.trackerUrl?.js ?? 'matomo.js'
@@ -140,13 +140,25 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
         // accurately measure the time spent in the visit
         window._paq.push(['enableHeartBeatTimer', heartBeatTime]);
         this.trackCustomDimensions();
-        // Scan For Media
+
+        // Set title for Matomo Media Analytics plugin and scan for media
+        const templateVars = await this.getTemplateVars();
         bindEvent(this.player, Events.STREAM_LOADED, () => {
+            const videoTitle = this.config.mediaAnalyticsTitle ? this.applyTemplate(this.config.mediaAnalyticsTitle, templateVars) : document.title;
+            const videoNodeList = this.player.containerElement.querySelectorAll('video');
+            for (let i = 0; i < videoNodeList.length; i++) {
+                // if multiple videos, data should only be send once
+                if (i > 0) {
+                    videoNodeList[i].setAttribute('data-matomo-ignore','');
+                } else {
+                    videoNodeList[i].dataset.matomoTitle = videoTitle;
+                }
+            }
             window._paq.push(['MediaAnalytics::scanForMedia']);
         });
     }
-    
-    applyTemplate(txt, templateVars) {        
+
+    applyTemplate(txt, templateVars) {
         return txt.replace(/\${[^{]*}/g, (t)=>{
             return t.substring(2, t.length-1).split(".").reduce((a,b)=>{return a[b];}, templateVars)
         });
@@ -163,7 +175,7 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
             const category = this.applyTemplate(categoryT, templateVars);
             const action = this.applyTemplate(actionT, templateVars);
             const name = this.applyTemplate(nameT, templateVars);
-            
+
             window._paq.push(['trackEvent', category, action, name]);
             this.player.log.debug(`Matomo plugin: track event category='${category}', action='${action}', name='${name}'`);
         }

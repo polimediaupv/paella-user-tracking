@@ -3,7 +3,7 @@
     "manifestFileName": "data.json",
 
     "defaultLayout": "presenter-presentation",
-    
+
     "cookieConsent": [
         {
             "type": "strictly-necessary",
@@ -87,7 +87,7 @@
             "enabled": true,
             "order": 1
         },
-        
+
         "es.upv.paella.playPauseButton": {
             "enabled": true,
             "order": 0
@@ -164,10 +164,11 @@
             },
             "matomoGlobalLoaded": false,
             "cookieType": "tracking",
+            "mediaAnalyticsTitle": "${videoId}",
             "events": {
                 "category": "PaellaPlayer",
                 "action": "${event}",
-                "name": "${videoId}"
+                "name": "${eventData}"
             },
             "customDimensions": {
                 "1": "${videoId}"
@@ -175,4 +176,3 @@
         }
     }
 }
-
