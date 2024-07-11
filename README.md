@@ -171,10 +171,11 @@ Collects the events sent by the `es.upv.paella.userEventTracker` plugin and send
             "js": "matomo.js"
         },
         "matomoGlobalLoaded": false,
+        "mediaAnalyticsTitle": "${videoId}",
         "events": {
             "category": "PaellaPlayer",
             "action": "${event}",
-            "name": "${videoId}"
+            "name": "${eventData}"
         },
         "customDimensions": {
             "1": "${videoId}"
@@ -210,6 +211,8 @@ Available template variables are:
 }
 ```
 
+The `mediaAnalyticsTitle` property defines the template variable that will be used as title information in the Matomo Media Analytics plugin. If not set, `document.title` will be used.
+
 ### Adapt to your institution
 
 You can extends this plugin and adapt it to your institution. In most cases you only need to implement two functions:
@@ -228,7 +231,7 @@ export default class MyExtentedMatomoUserTrackingDataPlugin extends MatomoUserTr
 
     async getTemplateVars() {
         let templateVars = await super.getTemplateVars();
-        
+
         return {
             ...templateVars,
             newvar: "My new variable"
@@ -257,5 +260,3 @@ Collects the events sent by the `es.upv.paella.userEventTracker` plugin and send
 ```
 
 **Exported as** `GoogleAnalyticsUserTrackingDataPlugin`.
-
-
