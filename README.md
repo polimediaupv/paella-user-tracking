@@ -171,6 +171,7 @@ Collects the events sent by the `es.upv.paella.userEventTracker` plugin and send
             "js": "matomo.js"
         },
         "matomoGlobalLoaded": false,
+        "disableAlwaysUseSendBeacon": true,
         "mediaAnalyticsTitle": "${videoId}",
         "events": {
             "category": "PaellaPlayer",
@@ -210,6 +211,10 @@ Available template variables are:
     "1": "${videoId}"
 }
 ```
+
+The `disableAlwaysUseSendBeacon` property allows to disable the use of beacons. With the default setting, Matomo uses the `navigator.sendBeacon()` method to send analytics data asynchronously via an HTTP POST request.
+Unfortunately, ad blockers use these beacons to identify and block such requests. Setting `disableAlwaysUseSendBeacon` to true will prevent Matomo from using such beacons. For more information have a look at https://developer.mozilla.org/en-US/docs/Web/API/Navigator/sendBeacon
+
 
 The `mediaAnalyticsTitle` property defines the template variable that will be used as title information in the Matomo Media Analytics plugin. If not set, `document.title` will be used.
 
