@@ -121,6 +121,7 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
                 php: this.config.trackerUrl?.php ?? 'matomo.php',
                 js: this.config.trackerUrl?.js ?? 'matomo.js'
             };
+            const disableAlwaysUseSendBeacon = this.config.disableAlwaysUseSendBeacon ?? false;
             this.player.log.debug("Matomo analytics plugin enabled.");
             this.trackCustomDimensions();
             const userId =  await this.getCurrentUserId();
@@ -133,6 +134,9 @@ export default class MatomoUserTrackingDataPlugin extends DataPlugin {
                 var u=server;
                 window._paq.push(['setTrackerUrl', u+trackerUrl.php]);
                 window._paq.push(['setSiteId', siteId]);
+                if (disableAlwaysUseSendBeacon) {
+                    window._paq.push(['disableAlwaysUseSendBeacon', 'true']);
+                }
                 var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
                 g.type='text/javascript'; g.async=true; g.src=u+trackerUrl.js; s.parentNode.insertBefore(g,s);
             })();
